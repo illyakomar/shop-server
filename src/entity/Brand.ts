@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
+import Product from './Product';
 
 @Entity()
 export default class Brand {
@@ -17,4 +18,10 @@ export default class Brand {
   @IsNotEmpty()
   @Column()
   image!: string;
+
+  @OneToMany(
+    () => Product,
+    (product) => product.brandId,
+    )
+  products!: Product[];
 }

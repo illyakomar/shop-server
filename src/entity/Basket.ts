@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 import User from './user';
+import BasketProduct from './BasketProduct';
 
 @Entity()
 export default class Basket {
@@ -14,4 +15,10 @@ export default class Basket {
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
+
+  @OneToMany(
+    () => BasketProduct,
+    (basketProduct) => basketProduct.basketId,
+    )
+  basketProducts!: BasketProduct[];
 }

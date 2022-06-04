@@ -1,5 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
+import ProductInfo from './ProductInfo';
+import Type from './Type';
+import Brand from './Brand';
+import ProductReview from './ProductReview';
 
 @Entity()
 export default class Product {
@@ -18,9 +22,8 @@ export default class Product {
   @Column()
   count!: number;
 
-  @IsNotEmpty()
   @Column()
-  size!: number;
+  specification: string;
 
   @IsNotEmpty()
   @Column()
@@ -32,5 +35,23 @@ export default class Product {
   
   @IsNotEmpty()
   @Column()
-  brandId!: number;   
+  brandId!: number;
+  
+  @OneToMany(
+    () => ProductInfo,
+    (productInfo) => productInfo.productId,
+    )
+  productInfo!: ProductInfo[];
+
+  @OneToMany(
+    () => ProductReview,
+    (productReview) => productReview.productId,
+    )
+  productReviews!: ProductReview[];
+
+  @ManyToOne(() => Type, (type) => type.products)
+  type!: Type;
+
+  @ManyToOne(() => Brand, (brand) => brand.products)
+  brand!: Brand;
 }
