@@ -7,13 +7,15 @@ const {
   DB_HOST,
   DB_USER,
   DB_NAME,
+  DB_PORT,
 } = process.env;
 
 if (
   !PORT ||
   !DB_HOST ||
   !DB_USER ||
-  !DB_NAME
+  !DB_NAME ||
+  !DB_PORT
 ) {
   throw new Error('Not all .env variables are configured');
 }
@@ -23,6 +25,7 @@ const envConfig = {
   dbHost: DB_HOST,
   dbUser: DB_USER,
   dbName: DB_NAME,
+  dbPort: DB_PORT,
 };
 
 export default envConfig;
