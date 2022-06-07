@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
-import { IsNotEmpty } from 'class-validator';
 import ProductInfo from './ProductInfo';
 import Type from './Type';
 import Brand from './Brand';
@@ -10,30 +9,24 @@ export default class Product {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @IsNotEmpty()
   @Column()
   name!: string;
 
-  @IsNotEmpty()
   @Column()
   price!: number;
 
-  @IsNotEmpty()
   @Column()
   count!: number;
 
   @Column()
   specification: string;
 
-  @IsNotEmpty()
   @Column()
   image!: string;
 
-  @IsNotEmpty()
   @Column()
   typeId!: number;
   
-  @IsNotEmpty()
   @Column()
   brandId!: number;
   

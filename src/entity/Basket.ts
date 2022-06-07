@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { IsNotEmpty } from 'class-validator';
 import User from './user';
 import BasketProduct from './BasketProduct';
 
@@ -8,7 +7,6 @@ export default class Basket {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @IsNotEmpty()
   @Column()
   userId!: string;
 
