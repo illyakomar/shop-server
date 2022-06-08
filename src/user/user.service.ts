@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import User from 'src/entity/user';
 import { Role } from 'src/role/role.enum';
 import UserInfoDto from './dto/user-info.dto';
+import { compare } from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -40,9 +41,25 @@ export class UserService {
     }});
   }
 
+  async getByPhoneNumber(phoneNumber: string): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { 
+      phoneNumber: phoneNumber  
+    }});
+  }
+
   async getUsersInRole(role: Role): Promise<User[]> {
     return this.userRepository.find({ where: { 
       role: role 
     }});
+  }
+
+  async checkIfAdministratorRegistered(): Promise<Boolean> {
+    return await this.userRepository.findOne({ where: { 
+      role: Role.Admin
+    }}) == undefined;
+  }
+
+  checkPassword(incomingPassword: string, currentPassword: string): Promise<boolean> {
+    return compare(incomingPassword, currentPassword);
   }
 }

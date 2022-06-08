@@ -1,8 +1,17 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 @Module({
+  imports: [
+    UserModule,
+    JwtModule.register({
+      secret: process.env.PRIVATE_KEY || 'SECRET',
+      signOptions: { expiresIn: '60s' }, // час життя токена 60 секунд
+    }),
+  ],
   controllers: [AuthController],
   providers: [AuthService],
 })
