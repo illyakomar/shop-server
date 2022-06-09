@@ -1,9 +1,10 @@
-import { BadRequestException, Body, Controller, Get, Post } from '@nestjs/common';
-import User from 'src/entity/user';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import UserInfoDto from 'src/user/dto/user-info.dto';
 import UserLoginDto from 'src/user/dto/user-login.dto';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
+import { Role } from 'src/role/role.enum';
+import WorkerRegisterDto from './dto/worker-register.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -24,18 +25,17 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() userInfoDto: UserInfoDto): Promise<User> {
+  async register(@Body() userInfoDto: UserInfoDto): Promise<{ accessToken: string }> {
     await this.authService.registerAdmin();
-    await this.verifyRegistration(userInfoDto);
-    return await this.authService.register(userInfoDto);
+    return { accessToken: await this.authService.register(userInfoDto) }; 
   }
 
-  private async verifyRegistration(userInfoDto: UserInfoDto) {
-    if (await this.userService.getByEmail(userInfoDto.email)) {
-      throw new BadRequestException(`Email: ${userInfoDto.email} вже зайнятий`);
+  @Post('registerModerator')
+  async registerModerator(@Body() workerRegisterDto: WorkerRegisterDto): Promise<{ accessToken: string }> {
+    if (workerRegisterDto.role === Role.Admin) {
+      throw new BadRequestException();
     }
-    if (await this.userService.getByPhoneNumber(userInfoDto.phoneNumber)) {
-      throw new BadRequestException(`Номер телефону: ${userInfoDto.phoneNumber} вже зайнятий`);
-    }
+    return { accessToken: await this.authService.registerModerator(workerRegisterDto) };
   }
+
 }

@@ -1,6 +1,7 @@
 import { IsEmail, IsNotEmpty, IsPhoneNumber } from 'class-validator';
+import { Role } from 'src/role/role.enum';
 
-export default class UserInfoDto {
+export default class WorkerRegisterDto {
   @IsNotEmpty()
   firstName: string;
 
@@ -17,4 +18,6 @@ export default class UserInfoDto {
 
   @IsNotEmpty()
   password: string;
+
+  role: Role;
 }
