@@ -11,14 +11,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ForRoles(Role.Admin)
-  @ForRoles(Role.Moder)
   @Get('all')
   async getAll(): Promise<User[]> {
     return await this.userService.getAllUsers();
   }
 
   @ForRoles(Role.Admin)
-  @ForRoles(Role.Moder)
   @Get(':id')
   async getById(@Param('id') id: string): Promise<User | undefined> {
     const user = await this.userService.getById(id);
