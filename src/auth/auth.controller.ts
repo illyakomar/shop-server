@@ -5,7 +5,7 @@ import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { Role } from 'src/role/role.enum';
 import WorkerRegisterDto from './dto/worker-register.dto';
-import { ForRoles } from './role-auth.decorators';
+import { ForAuthorized, ForRoles } from './role-auth.decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -31,6 +31,7 @@ export class AuthController {
     return { accessToken: await this.authService.register(userInfoDto) }; 
   }
 
+  @ForAuthorized()
   @ForRoles(Role.Admin)
   @Post('registerModerator')
   async registerModerator(@Body() workerRegisterDto: WorkerRegisterDto): Promise<{ accessToken: string }> {

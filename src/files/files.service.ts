@@ -22,7 +22,6 @@ export class FilesService {
 
   async deleteFile(fileName: string): Promise<void> {
     const filePath = path.resolve(__dirname, '..', `static/${fileName}`)
-    console.log(filePath);
     fs.unlinkSync(filePath);
   }
 }
