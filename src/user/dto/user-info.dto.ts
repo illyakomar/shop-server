@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsPhoneNumber } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsPhoneNumber, Length } from 'class-validator';
 
 export default class UserInfoDto {
   @IsNotEmpty()
@@ -15,6 +15,7 @@ export default class UserInfoDto {
   @IsPhoneNumber('UA', { message: 'Введіть коректний номер телефону' })
   phoneNumber: string;
 
+  @Length(4,16, { message: 'Пароль не менше 4 i не більше 16 символів' })
   @IsNotEmpty()
   password: string;
 }

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import ProductInfo from './ProductInfo';
-import Type from './Type';
+import Category from './Сategory';
 import Brand from './Brand';
 import ProductReview from './ProductReview';
 
@@ -25,7 +25,7 @@ export default class Product {
   image!: string;
 
   @Column()
-  typeId!: number;
+  categoryId!: number;
   
   @Column()
   brandId!: number;
@@ -42,8 +42,8 @@ export default class Product {
     )
   productReviews!: ProductReview[];
 
-  @ManyToOne(() => Type, (type) => type.products)
-  type!: Type;
+  @ManyToOne(() => Category, (category) => category.products)
+  category!: Category;
 
   @ManyToOne(() => Brand, (brand) => brand.products)
   brand!: Brand;

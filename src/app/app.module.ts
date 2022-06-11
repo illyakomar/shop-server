@@ -3,6 +3,10 @@ import envConfig from '../config/environment';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { BrandModule } from 'src/brand/brand.module';
+import { CategoryModule } from 'src/category/category.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -16,8 +20,13 @@ import { AuthModule } from 'src/auth/auth.module';
       entities: ["dist/entity/**/*.js"],
       synchronize: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'static'),
+    }),
     UserModule,
     AuthModule,
+    CategoryModule,
+    BrandModule,
   ]
 })
 export class AppModule {}
