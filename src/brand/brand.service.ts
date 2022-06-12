@@ -24,12 +24,12 @@ export class BrandService {
   }
 
   async deleteImageById(brandId: number) {
-    const imageName =  await this.getImageName(brandId);
+    const imageName =  await this.getBrandImageName(brandId);
     const {image} = imageName;
     await this.filesService.deleteFile(image);
   }
 
-  async getImageName(brandId: number) {
+  async getBrandImageName(brandId: number) {
     return this.brandRepository.findOne({ 
      select: [ "image" ],
      where: {id: brandId }
