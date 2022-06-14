@@ -1,4 +1,5 @@
 import { IsNotEmpty } from "class-validator";
+import ProductInfo from "src/entity/ProductInfo";
 
 export default class ProductDto {
   @IsNotEmpty()
@@ -18,4 +19,6 @@ export default class ProductDto {
   
   @IsNotEmpty({ message: 'Виберіть бренд' })
   brandId: number;
+
+  productInfo: ProductInfo[];
 }

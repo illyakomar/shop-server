@@ -23,7 +23,7 @@ export class ProductController {
       if (!await this.productService.getById(id)) {
         throw new NotFoundException();
       }
-      await this.productService.deleteById(id);
+     await this.productService.deleteById(id);
     } catch {
       throw new BadRequestException();
     }
@@ -55,4 +55,14 @@ export class ProductController {
 		): Promise<Product[]> {
     return await this.productService.getAllBrands(brandId,categoryId, limit, page);
   }
+
+  @Get(':id')
+  async getById(@Param('id') id: number): Promise<Product | undefined> {
+    const user = await this.productService.getById(id);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
+  }
+
 }

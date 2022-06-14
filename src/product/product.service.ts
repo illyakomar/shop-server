@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Product from 'src/entity/Product';
+import ProductInfo from 'src/entity/ProductInfo';
 import { FilesService } from 'src/files/files.service';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { createQueryBuilder, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import ProductDto from './dto/product.dto';
 
 @Injectable()
@@ -10,17 +11,36 @@ export class ProductService {
 	constructor(
 		@InjectRepository(Product)
 		private readonly productRepository: Repository<Product>,
+		@InjectRepository(ProductInfo)
+		private readonly productInfoRepository: Repository<ProductInfo>,
 		private readonly filesService: FilesService,
 	){}
 
 	async create(productDto: ProductDto, image: any): Promise<Product> {
-    const filename = await this.filesService.createFile(image);
-    return await this.productRepository.save({...productDto, image: filename});
+  const filename = await this.filesService.createFile(image);
+	const product = await this.productRepository.save({...productDto, image: filename});
+	if(productDto.productInfo){
+		  productDto.productInfo.forEach(element => 
+        this.productInfoRepository.save({
+          title: element.title,
+          description: element.description,
+          productId: product.id
+    }));
+	}
+	return product;
   }
 
   async deleteById(productId: number): Promise<DeleteResult> {
+    const productInfo = await this.getProductInfoId(productId);
+      if(productInfo){
+          for (let element of productInfo) {
+              await this.productInfoRepository.delete({
+                id: element.id
+            })
+          }
+      }
     await this.deleteImageById(productId);
-    return this.productRepository.delete(productId);
+    return await this.productRepository.delete(productId);
   }
 
   async deleteImageById(productId: number) {
@@ -36,10 +56,15 @@ export class ProductService {
     });
   }
 
-	async getById(productId: number): Promise<Product | undefined> {
-    return this.productRepository.findOne({ where: { 
-      id: productId 
-    }});
+  async getProductInfoId(productId: number) {
+    return await this.productInfoRepository.find({ select: ["id"], where: { productId: productId} });
+  }
+
+	async getById(productId: number): Promise<Product | undefined>{
+    return await this.productRepository.createQueryBuilder("product")
+    .innerJoinAndSelect("product.productInfo", "productInfo")
+    .where("product.id = :id", { id: productId })
+    .getOne()
   }
 
 	async updateProduct(productId: number, productDto: ProductDto, image: any): Promise<UpdateResult> {

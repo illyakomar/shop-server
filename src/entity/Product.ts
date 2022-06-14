@@ -32,7 +32,7 @@ export default class Product {
   
   @OneToMany(
     () => ProductInfo,
-    (productInfo) => productInfo.productId,
+    (productInfo) => productInfo.product,
     )
   productInfo!: ProductInfo[];
 
