@@ -1,6 +1,8 @@
 import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ForAuthorized, ForRoles } from 'src/auth/role-auth.decorators';
 import Product from 'src/entity/Product';
+import { Role } from 'src/role/role.enum';
 import ProductDto from './dto/product.dto';
 import { ProductService } from './product.service';
 
@@ -8,6 +10,8 @@ import { ProductService } from './product.service';
 export class ProductController {
   constructor(private productService: ProductService){}
 
+  @ForAuthorized()
+  @ForRoles(Role.Admin, Role.Moder)
   @Post('create')
   @UseInterceptors(FileInterceptor('image'))
   async createProduct(
@@ -17,6 +21,8 @@ export class ProductController {
    return await this.productService.create(productDto, image);
   }
 
+  @ForAuthorized()
+  @ForRoles(Role.Admin, Role.Moder)
   @Delete('delete/:id')
   async delete(@Param('id') id: number): Promise<void> {
     try {
@@ -29,6 +35,8 @@ export class ProductController {
     }
   }
 
+  @ForAuthorized()
+  @ForRoles(Role.Admin, Role.Moder)
   @Put('update/:id')
   @UseInterceptors(FileInterceptor('image'))
   async update(

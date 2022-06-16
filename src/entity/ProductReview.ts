@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import User from './user';
 import Product from './Product';
 
@@ -13,15 +13,20 @@ export default class ProductReview {
   @Column()
   description!: string;
 
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt!: Date;
+
   @Column()
   productId!: number;
 
   @Column()
   userId!: string;
 
-  @OneToOne(() => User)
-  @JoinColumn()
-  user: User;
+  @ManyToOne(() => User, (user) => user.productReviews)
+  user!: User;
 
   @ManyToOne(() => Product, (product) => product.productReviews)
   product!: Product;
