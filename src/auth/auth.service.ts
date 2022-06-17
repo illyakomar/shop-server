@@ -7,6 +7,7 @@ import UserInfoDto from "src/user/dto/user-info.dto";
 import { UserService } from "src/user/user.service";
 import { Role } from 'src/role/role.enum';
 import WorkerRegisterDto from "./dto/worker-register.dto";
+import { BasketService } from "src/basket/basket.service";
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly basketService: BasketService,
   ) {}
   
   async login(userInfoDto: UserInfoDto): Promise<string> {
@@ -25,6 +27,7 @@ export class AuthService {
     await this.verifyRegistration(userInfoDto);
     userInfoDto.password = await bcrypt.hash(userInfoDto.password, this.hashRounds);
     await this.userService.createUser(userInfoDto);
+    await this.basketService.createBasket(userInfoDto.id);
     return this.generateJWT(userInfoDto);
   }
 

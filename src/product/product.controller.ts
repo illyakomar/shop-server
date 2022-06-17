@@ -66,11 +66,11 @@ export class ProductController {
 
   @Get(':id')
   async getById(@Param('id') id: number): Promise<Product | undefined> {
-    const user = await this.productService.getById(id);
-    if (!user) {
+    const product = await this.productService.getById(id);
+    if (!product) {
       throw new NotFoundException();
     }
-    return user;
+    return product;
   }
 
 }

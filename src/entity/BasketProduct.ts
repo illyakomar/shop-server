@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import Basket from './Basket';
 import Product from './Product';
 
@@ -16,7 +16,6 @@ export default class BasketProduct {
   @ManyToOne(() => Basket, (basket) => basket.basketProducts)
   basket!: Basket;
 
-  @OneToOne(() => Product)
-  @JoinColumn()
-  product: Product;
+  @ManyToOne(() => Product, (product) => product.basketProducts)
+  product!: Product;
 }

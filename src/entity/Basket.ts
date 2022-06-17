@@ -16,7 +16,7 @@ export default class Basket {
 
   @OneToMany(
     () => BasketProduct,
-    (basketProduct) => basketProduct.basketId,
+    (basketProduct) => basketProduct.basket,
     )
   basketProducts!: BasketProduct[];
 }

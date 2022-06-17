@@ -3,6 +3,7 @@ import ProductInfo from './ProductInfo';
 import Category from './Сategory';
 import Brand from './Brand';
 import ProductReview from './ProductReview';
+import BasketProduct from './BasketProduct';
 
 @Entity()
 export default class Product {
@@ -41,6 +42,12 @@ export default class Product {
     (productReview) => productReview.productId,
     )
   productReviews!: ProductReview[];
+
+  @OneToMany(
+    () => BasketProduct,
+    (basketProduct) => basketProduct.product,
+    )
+  basketProducts!: BasketProduct[];
 
   @ManyToOne(() => Category, (category) => category.products)
   category!: Category;

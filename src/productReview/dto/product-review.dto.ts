@@ -10,6 +10,5 @@ export default class ProductReviewDto {
   @IsNotEmpty()
   productId: number;
   
-  @IsNotEmpty()
   userId: string;
 }

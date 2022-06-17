@@ -1,6 +1,8 @@
 import { IsEmail, IsNotEmpty, IsPhoneNumber, Length } from 'class-validator';
 
 export default class UserInfoDto {
+  id:string;
+
   @IsNotEmpty()
   firstName: string;
 
