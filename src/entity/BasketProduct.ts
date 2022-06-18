@@ -7,6 +7,12 @@ export default class BasketProduct {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({default: 0})
+  price!: number;
+
+  @Column({default: 1})
+  quantity!: number;
+
   @Column()
   basketId!: number;
 

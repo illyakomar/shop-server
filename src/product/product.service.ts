@@ -60,11 +60,15 @@ export class ProductService {
     return await this.productInfoRepository.find({ select: ["id"], where: { productId: productId} });
   }
 
-	async getById(productId: number): Promise<Product | undefined>{
+	async getProductById(productId: number): Promise<Product | undefined>{
     return await this.productRepository.createQueryBuilder("product")
     .innerJoinAndSelect("product.productInfo", "productInfo")
     .where("product.id = :id", { id: productId })
     .getOne()
+  }
+
+  async getProductWithoutInfo(productId: any): Promise<Product | undefined> {
+    return await this.productRepository.findOne({ where: productId });
   }
 
 	async updateProduct(productId: number, productDto: ProductDto, image: any): Promise<UpdateResult> {

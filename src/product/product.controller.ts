@@ -26,7 +26,7 @@ export class ProductController {
   @Delete('delete/:id')
   async delete(@Param('id') id: number): Promise<void> {
     try {
-      if (!await this.productService.getById(id)) {
+      if (!await this.productService.getProductById(id)) {
         throw new NotFoundException();
       }
      await this.productService.deleteById(id);
@@ -45,7 +45,7 @@ export class ProductController {
     @UploadedFile() image
     ): Promise<void> {
     try {
-      if (!await this.productService.getById(id)) {
+      if (!await this.productService.getProductById(id)) {
         throw new NotFoundException();
       }
       await this.productService.updateProduct(id, productDto, image);
@@ -66,11 +66,11 @@ export class ProductController {
 
   @Get(':id')
   async getById(@Param('id') id: number): Promise<Product | undefined> {
-    const product = await this.productService.getById(id);
+    const product = await this.productService.getProductById(id);
     if (!product) {
       throw new NotFoundException();
     }
     return product;
   }
-
+  
 }
