@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { ForAuthorized, GetUser } from 'src/auth/role-auth.decorators';
 import Basket from 'src/entity/Basket';
 import BasketProduct from 'src/entity/BasketProduct';
@@ -15,16 +15,24 @@ export class BasketController {
   async addProduct(
     @Body() id: number,
     @GetUser() user: User,  
-    ): Promise<BasketProduct>{
-   return await this.basketService.addToBasket(id, user.id);
+    ): Promise<BasketProduct[]>{
+   return await this.basketService.addProduct(id, user.id);
   }
 
   @Post('update')
   async updateProduct(
     @Body() basketUpdateDto: BasketUpdateDto,
     @GetUser() user: User,  
-    ): Promise<BasketProduct>{
-   return await this.basketService.updateBasket(basketUpdateDto, user.id);
+    ): Promise<BasketProduct[]>{
+   return await this.basketService.updateProduct(basketUpdateDto, user.id);
+  }
+
+  @Delete('delete/:productId')
+  async delete(
+    @Param('productId') productId: number,
+    @GetUser() user: User
+    ): Promise<BasketProduct[]> {
+    return await this.basketService.deleteProduct(productId, user.id);
   }
 
   @Get('getBasketUser')

@@ -24,7 +24,7 @@ export class BasketService {
     return await this.basketRepository.save(basket);
   }
 
-  async addToBasket(productId: number, userId: string): Promise<BasketProduct>{
+  async addProduct(productId: number, userId: string): Promise<BasketProduct[]>{
     const basket = await this.getBasketByUser(userId);
     if(!basket){ 
       throw new NotFoundException('Корзина користувача не знайдена!');
@@ -42,11 +42,12 @@ export class BasketService {
 
     basket.fullPrice = basket.fullPrice + basketProduct.price;
     await this.basketRepository.save(basket);
+    await this.basketProductRepository.save(basketProduct)
 
-    return await this.basketProductRepository.save(basketProduct);
+    return await this.getBasketProductbyUser(userId);
   }
 
-  async updateBasket(basketUpdateDto: BasketUpdateDto, userId: string): Promise<BasketProduct>{
+  async updateProduct(basketUpdateDto: BasketUpdateDto, userId: string): Promise<BasketProduct[]>{
     if(basketUpdateDto.quantity < 1){
       basketUpdateDto.quantity = 1;
     }
@@ -61,10 +62,35 @@ export class BasketService {
       throw new NotFoundException('Товар в корзині не знайден!');
     }
 
+    const productPrice = basketProduct.price / basketProduct.quantity;
+    basket.fullPrice = basket.fullPrice - basketProduct.price;
+
+    basketProduct.quantity = basketUpdateDto.quantity;
+    basketProduct.price = basketUpdateDto.quantity * productPrice;
+    basket.fullPrice = basket.fullPrice + basketProduct.price;
+    await this.basketRepository.save(basket);
+    await this.basketProductRepository.save(basketProduct);
+
+    return await this.getBasketProductbyUser(userId);
+  }
+
+  async deleteProduct(productId: number, userId: string): Promise<BasketProduct[]>{
+    const basket = await this.getBasketByUser(userId);
+    if(!basket){ 
+      throw new NotFoundException('Корзина користувача не знайдена!');
+    }
+
+    const basketProduct = await this.getBasketProductByBasketIdProductId(basket.id, productId);
+    if(!basketProduct){ 
+      throw new NotFoundException('Такого товару немає!');
+    }
+
+    basket.fullPrice = basket.fullPrice - basketProduct.price;
     
+    await this.basketProductRepository.delete(basketProduct.id);
+    await this.basketRepository.save(basket);
 
-
-
+    return await this.getBasketProductbyUser(userId);
   }
 
   async getBasketProductByBasketIdProductId(basketId: number, productId: number ) {
@@ -82,7 +108,7 @@ export class BasketService {
 
   async getBasketProductbyUser(userId: string): Promise<BasketProduct[] | undefined> {
     return await this.basketProductRepository.createQueryBuilder("basketProduct")
-    .select(['basketProduct.id', 'basketProduct.price', 'product.name', 'product.image'])
+    .select(['basket.fullPrice','basketProduct.id','basketProduct.quantity', 'basketProduct.price', 'product.name', 'product.image'])
     .leftJoin("basketProduct.basket", "basket")
     .leftJoin("basketProduct.product", "product")
     .where("basket.userId = :id", { id: userId })
