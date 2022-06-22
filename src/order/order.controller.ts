@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
-import { ForAuthorized, GetUser } from 'src/auth/role-auth.decorators';
+import { ForAuthorized, ForRoles, GetUser } from 'src/auth/role-auth.decorators';
 import Order from 'src/entity/Order';
 import OrderProduct from 'src/entity/OrderProduct';
 import User from 'src/entity/user';
@@ -7,6 +7,7 @@ import { OrderService } from './order.service';
 import OrderProductUpdateDto from './dto/order-product-update.dto';
 import CreateOrderDto from './dto/create-order.dto';
 import { AuthService } from 'src/auth/auth.service';
+import { Role } from 'src/other/role.enum';
 
 @Controller('order')
 export class OrderController {
@@ -30,32 +31,37 @@ export class OrderController {
     return await this.orderService.createOrder(createOrderDto, createOrderDto.userInfoDto.id);
   }
 
-  @Post('update')
-  async updateProduct(
+  @ForAuthorized()
+  @ForRoles(Role.Admin, Role.Moder)
+  @Post('update/:id')
+  async updateOrderProduct(
     @Body() orderProductUpdateDto: OrderProductUpdateDto,
-    @GetUser() user: User,  
+    @Param('id') id: string
     ): Promise<OrderProduct[]>{
-   return await this.orderService.updateProduct(orderProductUpdateDto, user.id);
+   return await this.orderService.updateOrderProduct(orderProductUpdateDto, id);
   }
 
   @Delete('delete/:productId')
-  async delete(
+  async deleteProductInOrder(
     @Param('productId') productId: number,
     @GetUser() user: User
     ): Promise<OrderProduct[]> {
     return await this.orderService.deleteProduct(productId, user.id);
   }
 
-  @Get('getOrderUser')
-  async getOrderByUser(@GetUser() user: User): Promise<Order | undefined> {
-    const order = await this.orderService.getOrderByUser(user.id);
+  @ForAuthorized()
+  @ForRoles(Role.Admin, Role.Moder)
+  @Get('getOrder/:id')
+  async getOrderByUserId(@Param('id') id: string): Promise<OrderProduct[] | undefined> {
+    const order = await this.orderService.getOrderProductbyUser(id);
     if (!order) {
       throw new NotFoundException();
     }
     return order;
   }
 
-  @Get('getOrderProductUser')
+  @ForAuthorized()
+  @Get('getOwnOrder')
   async getOrderProductbyUser(
     @GetUser() user: User
   ): Promise<OrderProduct[] | undefined> {

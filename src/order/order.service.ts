@@ -63,7 +63,7 @@ export class OrderService {
     return await this.getOrderProductbyUser(userId);
   }
 
-  async updateProduct(orderProductUpdateDto: OrderProductUpdateDto, userId: string): Promise<OrderProduct[]>{
+  async updateOrderProduct(orderProductUpdateDto: OrderProductUpdateDto, userId: string): Promise<OrderProduct[]>{
     if(orderProductUpdateDto.quantity < 1){
       orderProductUpdateDto.quantity = 1;
     }
@@ -124,7 +124,8 @@ export class OrderService {
 
   async getOrderProductbyUser(userId: string): Promise<OrderProduct[] | undefined> {
     return await this.orderProductRepository.createQueryBuilder("orderProduct")
-    .select(['order.fullPrice','orderProduct.id','orderProduct.quantity', 'orderProduct.price', 'product.name', 'product.image'])
+    .select(['order.fullPrice', 'order.createdAt', 'order.orderStatus', 'order.city', 'order.deliveryAddress',  
+    'orderProduct.id','orderProduct.quantity', 'orderProduct.price', 'product.name', 'product.image'])
     .leftJoin("orderProduct.order", "order")
     .leftJoin("orderProduct.product", "product")
     .where("order.userId = :id", { id: userId })
