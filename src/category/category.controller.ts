@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { ForAuthorized, ForRoles } from 'src/auth/role-auth.decorators';
 import Category from 'src/entity/Сategory';
-import { Role } from 'src/role/role.enum';
+import { Role } from 'src/other/role.enum';
 import { CategoryService } from './category.service';
 import CategoryInfoDto from './dto/category-info.dto';
 

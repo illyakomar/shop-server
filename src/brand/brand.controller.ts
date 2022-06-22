@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ForAuthorized, ForRoles } from 'src/auth/role-auth.decorators';
 import Brand from 'src/entity/Brand';
-import { Role } from 'src/role/role.enum';
+import { Role } from 'src/other/role.enum';
 import { BrandService } from './brand.service';
 import BrandInfoDto from './dto/brand-info.dto';
 

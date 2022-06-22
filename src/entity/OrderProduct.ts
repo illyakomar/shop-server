@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import Basket from './Basket';
+import Order from './Order';
 import Product from './Product';
 
 @Entity()
-export default class BasketProduct {
+export default class OrderProduct {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -14,14 +14,14 @@ export default class BasketProduct {
   quantity!: number;
 
   @Column()
-  basketId!: number;
+  orderId!: number;
 
   @Column()
   productId!: number;
 
-  @ManyToOne(() => Basket, (basket) => basket.basketProducts)
-  basket!: Basket;
+  @ManyToOne(() => Order, (order) => order.orderProducts)
+  order!: Order;
 
-  @ManyToOne(() => Product, (product) => product.basketProducts)
+  @ManyToOne(() => Product, (product) => product.orderProducts)
   product!: Product;
 }

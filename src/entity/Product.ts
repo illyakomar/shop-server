@@ -3,7 +3,7 @@ import ProductInfo from './ProductInfo';
 import Category from './Сategory';
 import Brand from './Brand';
 import ProductReview from './ProductReview';
-import BasketProduct from './BasketProduct';
+import OrderProduct from './OrderProduct';
 
 @Entity()
 export default class Product {
@@ -44,10 +44,10 @@ export default class Product {
   productReviews!: ProductReview[];
 
   @OneToMany(
-    () => BasketProduct,
-    (basketProduct) => basketProduct.product,
+    () => OrderProduct,
+    (orderProduct) => orderProduct.product,
     )
-  basketProducts!: BasketProduct[];
+  orderProducts!: OrderProduct[];
 
   @ManyToOne(() => Category, (category) => category.products)
   category!: Category;

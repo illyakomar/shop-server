@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsPhoneNumber, Length } from 'class-validator';
-import { Role } from 'src/role/role.enum';
+import { Role } from 'src/other/role.enum';
 
 export default class WorkerRegisterDto {
   id: string;

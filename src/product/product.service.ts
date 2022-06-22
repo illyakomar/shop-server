@@ -67,8 +67,10 @@ export class ProductService {
     .getOne()
   }
 
-  async getProductWithoutInfo(productId: any): Promise<Product | undefined> {
-    return await this.productRepository.findOne({ where: productId });
+  async getProductWithoutInfo(productId: number): Promise<Product | undefined> {
+    return await this.productRepository.findOne({ where: {
+      id: productId
+    }});
   }
 
 	async updateProduct(productId: number, productDto: ProductDto, image: any): Promise<UpdateResult> {
@@ -80,11 +82,11 @@ export class ProductService {
     return await this.productRepository.update(productId, productDto);
   }
 
-	async getAllBrands(brandId: number, categoryId: number, limit: number, page: number): Promise<Product[]> {
+	async getAll(brandId: number, categoryId: number, limit: number, page: number): Promise<Product[]> {
 		let products;
-		page = page || 1; //Сторінка
-		limit = limit || 9; // Кількість товару на одній сторінці
-		let offset = page * limit - limit; //Без перших ... товарів
+		page = page || 1; 
+		limit = limit || 9; 
+		let offset = page * limit - limit; 
 		if(!brandId && !categoryId){
 			products = await this.productRepository.findAndCount({ take: limit, skip: offset}); 
 		}

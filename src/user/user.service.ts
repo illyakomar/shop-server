@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from 'src/entity/user';
-import { Role } from 'src/role/role.enum';
+import { Role } from 'src/other/role.enum';
 import UserInfoDto from './dto/user-info.dto';
 import { compare } from 'bcryptjs';
 

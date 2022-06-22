@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ForAuthorized, ForRoles } from 'src/auth/role-auth.decorators';
 import Product from 'src/entity/Product';
-import { Role } from 'src/role/role.enum';
+import { Role } from 'src/other/role.enum';
 import ProductDto from './dto/product.dto';
 import { ProductService } from './product.service';
 
@@ -61,7 +61,7 @@ export class ProductController {
     @Query('limit') limit: number,
     @Query('page') page: number,
 		): Promise<Product[]> {
-    return await this.productService.getAllBrands(brandId,categoryId, limit, page);
+    return await this.productService.getAll(brandId,categoryId, limit, page);
   }
 
   @Get(':id')

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Role } from 'src/role/role.enum';
+import { Role } from 'src/other/role.enum';
 import ProductReview from './ProductReview';
 
 @Entity()
