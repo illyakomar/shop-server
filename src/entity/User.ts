@@ -23,6 +23,11 @@ export default class User {
   password!: string;
 
   @Column({
+    default: false
+  })
+  banned!: boolean;
+
+  @Column({
     type: 'enum',
     enum: Role,
     default: Role.User

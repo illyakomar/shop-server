@@ -21,6 +21,8 @@ export class AuthController {
     const user = await this.userService.getByEmail(userLoginDto.email);
     if (!user || !await this.userService.checkPassword(userLoginDto.password, user.password)) {
       throw new BadRequestException("Неправильний email або пароль");
+    } else if(user.banned){
+      throw new BadRequestException("Доступ заблоковано");
     }
     return { accessToken: await this.authService.login(user) }; 
   }

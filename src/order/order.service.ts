@@ -131,4 +131,11 @@ export class OrderService {
     .where("order.userId = :id", { id: userId })
     .getMany()
   }
+
+  async getAllOrders(): Promise<Order[]> {
+    return this.orderRepository.createQueryBuilder("order")
+    .innerJoinAndSelect("order.orderProducts", "orderProduct")
+    .getMany()
+  }
+
 }

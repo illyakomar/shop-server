@@ -61,6 +61,13 @@ export class OrderController {
   }
 
   @ForAuthorized()
+  @ForRoles(Role.Admin, Role.Moder)
+  @Get('all')
+  async getAllOrder(): Promise<Order[] | undefined> {
+    return await this.orderService.getAllOrders();
+  }
+
+  @ForAuthorized()
   @Get('getOwnOrder')
   async getOrderProductbyUser(
     @GetUser() user: User

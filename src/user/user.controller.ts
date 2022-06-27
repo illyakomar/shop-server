@@ -42,13 +42,13 @@ export class UserController {
   }
 
   @ForRoles(Role.Admin)
-  @Delete('delete/:id')
-  async delete(@Param('id') id: string): Promise<void> {
+  @Get('ban/:id')
+  async banUser(@Param('id') id: string): Promise<User> {
     try {
       if (!await this.userService.getById(id)) {
         throw new NotFoundException();
       }
-      await this.userService.deleteById(id);
+     return await this.userService.banById(id);
     } catch {
       throw new BadRequestException();
     }

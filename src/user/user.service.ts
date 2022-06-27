@@ -21,8 +21,10 @@ export class UserService {
     return await this.userRepository.update(id, userInfoDto);
   }
 
-  async deleteById(userId: string): Promise<DeleteResult> {
-    return this.userRepository.delete(userId);
+  async banById(userId: string): Promise<User> {
+    const user = await this.getById(userId);
+    user.banned = true;
+    return await this.userRepository.save(user);
   }
 
   async getAllUsers(): Promise<User[]> {
